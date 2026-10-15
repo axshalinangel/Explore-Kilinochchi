@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Kilinochchi - Tourist Information & Trip Planning Portal</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ADMIN ACTIVE NOTIFICATION BANNER -->
+  <div id="adminBanner" class="admin-banner">
+    <div>
+      <strong>Administrator Mode Active</strong>
+    </div>
+    <div>
+      <button onclick="openAdminDashboard()">Manage Attractions</button>
+      <button onclick="adminLogout()" style="background: #dc3545; margin-left: 0.5rem;">Logout</button>
+    </div>
+  </div>
+
+  <!-- NAVIGATION BAR -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#" class="brand-link">
+        <div class="brand-text">
+          <h1>Explore Kilinochchi</h1>
+          <span>Northern Sri Lanka Tourism</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="#explore" class="nav-link active">Explore Places</a></li>
+          <li><a href="#tripPlanner" class="nav-link">Trip Planner</a></li>
+          <li><a href="#about" class="nav-link">About Project</a></li>
+          <li>
+            <a href="#tripPlanner" class="nav-link nav-cta">
+              My Trip <span class="badge-trip-count">0</span>
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)" id="navAdminBtn" class="nav-link" onclick="openAdminLogin()">
+              Admin Login
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO BANNER SECTION -->
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Explore Kilinochchi Tourist Guide</h2>
+      <p>
+        Discover 12 selected historical, religious, nature, recreational, food, and local market attractions 
+        located within 25 km of Kilinochchi town, and create your personalized one-day travel itinerary.
+      </p>
+
+      <!-- Search Box -->
+      <div class="hero-search-box">
+        <input type="text" id="searchInput" placeholder="Search attraction name, category, or location...">
+        <button onclick="document.getElementById('explore').scrollIntoView({behavior:'smooth'})">Search Places</button>
+      </div>
+
+      <!-- Quick Metrics -->
+      <div class="hero-metrics">
+        <div class="metric-item">
+          <strong>12</strong>
+          <span>Attractions</span>
+        </div>
+        <div class="metric-item">
+          <strong>6</strong>
+          <span>Categories</span>
+        </div>
+        <div class="metric-item">
+          <strong>&lt; 25 km</strong>
+          <span>Radius</span>
+        </div>
+        <div class="metric-item">
+          <strong>1-Day</strong>
+          <span>Trip Planner</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY FILTER BAR -->
+  <section class="category-filter-section">
+    <div class="filter-bar">
+      <button class="filter-btn active" data-category="all">
+        All Places (12)
+      </button>
+      <button class="filter-btn" data-category="historical-heritage">
+        Historical & Heritage
+      </button>
+      <button class="filter-btn" data-category="religious-cultural">
+        Religious & Cultural
+      </button>
+      <button class="filter-btn" data-category="nature-scenic">
+        Nature & Scenic
+      </button>
+      <button class="filter-btn" data-category="recreational-parks">
+        Recreational & Parks
+      </button>
+      <button class="filter-btn" data-category="food-dining">
+        Food & Dining
+      </button>
+      <button class="filter-btn" data-category="markets-lifestyle">
+        Markets & Lifestyle
+      </button>
+    </div>
+  </section>
+
+  <!-- MAIN ATTRACTIONS CATALOG SECTION -->
+  <main class="main-container" id="explore">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">Selected Tourist Attractions</h2>
+        <p class="section-subtitle">Browse curated landmarks with verified distance and location data</p>
+      </div>
+
+      <div class="controls-group">
+        <label for="sortSelect" style="font-size: 0.9rem; font-weight: 600; color: #495057;">Sort By:</label>
+        <select id="sortSelect" class="sort-select">
+          <option value="distance">Distance: Nearest First</option>
+          <option value="distance_desc">Distance: Furthest First</option>
+          <option value="name">Name: Alphabetical (A-Z)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- DYNAMIC PLACES GRID -->
+    <div class="places-grid" id="placesGrid">
+      <!-- Populated dynamically via app.js -->
+    </div>
+
+    <!-- ONE-DAY TRIP PLANNER SECTION -->
+    <section class="trip-planner-section" id="tripPlanner">
+      <div class="section-head" style="margin-bottom: 0.75rem;">
+        <div>
+          <div class="planner-badge-pill">✨ SMART ITINERARY &amp; ROUTE ENGINE</div>
+          <h2 class="section-title">One-Day Trip Planner &amp; Route Optimizer</h2>
+          <p class="section-subtitle">Select destinations to automatically compute total travel distance, sequential timetable, budget estimates, and optimized driving routes across Kilinochchi (&lt; 25 km radius)</p>
+        </div>
+      </div>
+
+      <!-- Curated 1-Day Pre-Set Themes -->
+      <div class="curated-templates-container">
+        <div class="curated-templates-header">
+          <span>🎯 <strong>Instant 1-Day Tours:</strong> Select a curated theme or build your custom route below:</span>
+        </div>
+        <div class="curated-templates-grid">
+          <button type="button" class="template-card" onclick="loadCuratedTemplate('heritage')">
+            <span class="template-icon">🏛️</span>
+            <div class="template-info">
+              <strong>Heritage &amp; History Trail</strong>
+              <small>War Memorial • Poonakary Fort • Kandasamy Kovil • Vanniyan</small>
+            </div>
+            <span class="template-pill">4 Stops • 31.4 km</span>
+          </button>
+          <button type="button" class="template-card" onclick="loadCuratedTemplate('nature')">
+            <span class="template-icon">🌿</span>
+            <div class="template-info">
+              <strong>Nature &amp; Scenic Escape</strong>
+              <small>Iranamadu Tank • Green Park • ReeCha Park • Ammachchi</small>
+            </div>
+            <span class="template-pill">4 Stops • 17.0 km</span>
+          </button>
+          <button type="button" class="template-card" onclick="loadCuratedTemplate('spiritual')">
+            <span class="template-icon">🕊️</span>
+            <div class="template-info">
+              <strong>Spiritual &amp; Cultural Journey</strong>
+              <small>Murukandy • Kandasamy • St. Theresa's • Lumbini • Ammachchi</small>
+            </div>
+            <span class="template-pill">5 Stops • 23.8 km</span>
+          </button>
+          <button type="button" class="template-card" onclick="loadCuratedTemplate('highlights')">
+            <span class="template-icon">⭐</span>
+            <div class="template-info">
+              <strong>Kilinochchi Highlights Express</strong>
+              <small>Public Market • War Memorial • Iranamadu • Vanniyan • ReeCha</small>
+            </div>
+            <span class="template-pill">5 Stops • 21.0 km</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="planner-grid">
+        <!-- Left: Selected Places List -->
+        <div>
+          <div class="planner-stops-header">
+            <div class="stops-title-group">
+              <h3 style="font-size: 1.15rem; color: #212529; margin: 0;">
+                Your Planned Stops (<span class="badge-trip-count">0</span>)
+              </h3>
+              <span id="routeOptimizedBadge" class="badge-route-opt" style="display: none;">✓ Route Optimized</span>
+            </div>
+            <div class="stops-action-buttons">
+              <button type="button" class="btn-opt-route" onclick="optimizeTripRoute()" title="Reorder stops to minimize total travel distance">
+                ⚡ Optimize Route
+              </button>
+              <button type="button" class="btn-clear-stops" onclick="clearAllTripStops()">
+                Clear All
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Add Dropdown Selector -->
+          <div class="quick-add-bar">
+            <select id="quickAddSelect" class="form-control" onchange="quickAddPlace(this.value)">
+              <option value="">➕ Quick Add Attraction to Itinerary...</option>
+              <!-- Populated dynamically via JS -->
+            </select>
+          </div>
+
+          <div class="selected-places-list" id="selectedTripContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Right: Summary and Generation Form -->
+        <div>
+          <div class="trip-summary-box">
+            <h3 style="font-size: 1.15rem; margin-bottom: 0.8rem; color: #0b62a4; display: flex; align-items: center; justify-content: space-between;">
+              <span>Itinerary Summary</span>
+              <span style="font-size: 0.78rem; font-weight: normal; color: #6c757d;">Origin: Kilinochchi Center</span>
+            </h3>
+
+            <div class="summary-stats-container">
+              <div class="summary-stat-row">
+                <span>Total Selected Stops:</span>
+                <strong id="totalStops">0</strong>
+              </div>
+              <div class="summary-stat-row">
+                <span>Estimated Travel Distance:</span>
+                <strong id="totalDistance">0.0 km</strong>
+              </div>
+              <div class="summary-stat-row">
+                <span>Estimated Transit Drive Time:</span>
+                <strong id="totalTransitTime">0 mins</strong>
+              </div>
+              <div class="summary-stat-row">
+                <span>Estimated Sightseeing Time:</span>
+                <strong id="totalVisitTime">0 mins</strong>
+              </div>
+              <div class="summary-stat-row highlight">
+                <span>Total Tour Duration:</span>
+                <strong id="totalDuration">0.0 hrs</strong>
+              </div>
+              <div class="summary-stat-row">
+                <span>Expected Finish Time:</span>
+                <strong id="estimatedFinishTime">--:--</strong>
+              </div>
+              <div class="summary-stat-row budget-row">
+                <span>Estimated Budget (Admissions + Meals):</span>
+                <strong id="totalBudget">LKR 0</strong>
+              </div>
+            </div>
+
+            <!-- Smart Advisories / Warnings container -->
+            <div id="plannerAdvisories" class="planner-advisories" style="display: none;"></div>
+
+            <div class="planner-controls">
+              <div class="form-row">
+                <label for="tripVisitorName" class="form-label">Visitor / Party Name:</label>
+                <input type="text" id="tripVisitorName" class="form-control" placeholder="Visitor / Group Name" value="Suwedha Sivakumar">
+              </div>
+              <div class="form-row form-row-split">
+                <div style="flex: 1;">
+                  <label for="tripDate" class="form-label">Date of Travel:</label>
+                  <input type="date" id="tripDate" class="form-control">
+                </div>
+                <div style="flex: 1;">
+                  <label for="tripStartTime" class="form-label">Departure Time:</label>
+                  <input type="time" id="tripStartTime" class="form-control" value="08:30" title="Starting Departure Time">
+                </div>
+              </div>
+              <button class="btn-generate-trip" onclick="generateItinerary()">
+                <span>🚀 Generate 1-Day Itinerary &amp; Schedule</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISUAL ROUTE MAP / FLOW PREVIEW (Appears after stops are selected) -->
+      <div id="visualRoutePreview" class="visual-route-container" style="display: none;">
+        <div class="route-header">
+          <h4>🗺️ Sequenced Route Pipeline</h4>
+          <span id="routeDistanceSummary" class="route-dist-tag">0.0 km Total</span>
+        </div>
+        <div class="route-pipeline" id="routePipeline">
+          <!-- Flow items rendered here -->
+        </div>
+      </div>
+
+      <!-- GENERATED ITINERARY VOUCHER / TIMELINE RESULT -->
+      <div id="itineraryResult" class="itinerary-result-card">
+        <div class="voucher-header">
+          <div class="voucher-brand">
+            <div class="voucher-meta-badge">
+              <span class="badge-official">OFFICIAL TOURIST ITINERARY VOUCHER</span>
+              <span class="voucher-code" id="voucherCode">KIL-2026-TRIP-7492</span>
+            </div>
+            <h3 id="voucherTitle">Kilinochchi One-Day Travel Itinerary</h3>
+            <p id="voucherDate" style="color: #6c757d; font-size: 0.9rem;"></p>
+            <p id="voucherSummary" style="color: #0b62a4; font-weight: 600; margin-top: 0.3rem;"></p>
+          </div>
+          <div class="voucher-export-actions">
+            <button type="button" class="btn-voucher-action btn-maps" onclick="openGoogleMapsRoute()" title="Open entire multi-stop route in Google Maps navigation">
+              🗺️ Open in Google Maps
+            </button>
+            <button type="button" class="btn-voucher-action btn-calendar" onclick="exportToCalendar()" title="Download iCalendar file (.ics) for Google or Apple Calendar">
+              📅 Add to Calendar
+            </button>
+            <button type="button" class="btn-voucher-action btn-share" onclick="copyItineraryToClipboard()" title="Copy formatted text for WhatsApp or SMS">
+              📋 Share / Copy
+            </button>
+            <button type="button" class="btn-print-voucher" onclick="printItinerary()" title="Print official trip voucher or save as PDF">
+              🖨️ Print / Save PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- Voucher Quick Metric Bar -->
+        <div class="voucher-metrics-bar" id="voucherMetricsBar">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <div class="timeline" id="timelineContainer">
+          <!-- Populated dynamically with stops, times, and activities -->
+        </div>
+
+        <!-- Budget & Practical Guidelines Section in Voucher -->
+        <div class="voucher-practical-guide">
+          <div class="guide-box">
+            <h4>💡 Traveler Guidelines &amp; Tips for Kilinochchi</h4>
+            <ul>
+              <li><strong>Modest Dress Code:</strong> Cover shoulders and knees when entering Murukandy Kovil, Kandasamy Kovil, or Lumbini Viharaya. Footwear must be removed before entering sanctum grounds.</li>
+              <li><strong>Cash Currency:</strong> Carry local currency (LKR) in small denominations for public markets, parking, and traditional food stalls.</li>
+              <li><strong>Photography:</strong> Photography is welcomed at war memorials and scenic points; please ask vendor permission at the Public Market.</li>
+              <li><strong>Sun Protection:</strong> Northern sunshine is intense between 11:30 AM and 3:30 PM. Carry bottled drinking water, sunglasses, and sun protection.</li>
+            </ul>
+          </div>
+          <div class="guide-box" id="voucherBudgetSummaryBox">
+            <h4>💰 Estimated Day Expenses (Per Traveler)</h4>
+            <div id="voucherBudgetContent"></div>
+          </div>
+        </div>
+
+        <div class="voucher-footer-note">
+          <div>
+            <strong>Explore Kilinochchi Academic Project Verification:</strong> All 12 attractions are verified within the required 25 km radius of Kilinochchi District center, Northern Province, Sri Lanka.
+          </div>
+          <div class="voucher-sign-line">
+            <span>BIT ITE2953 • Student ID: E2410134 • University of Moratuwa</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT / ACADEMIC BACKGROUND SECTION -->
+    <section class="trip-planner-section" id="about" style="margin-top: 3.5rem; background: #fafbfc;">
+      <h2 class="section-title">About Explore Kilinochchi</h2>
+      <p style="margin: 1rem 0; color: #495057;">
+        This web-based tourist information and trip planning system addresses the fragmentation of local tourism information across northern Sri Lanka. By centralizing 12 selected destinations under structured categories, measuring verified distances from the student reference location (&lt; 25 km radius), and offering an automated one-day itinerary engine, the application simplifies travel planning for both domestic and international visitors.
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+        <div style="background: #fff; padding: 1.25rem; border-radius: 6px; border: 1px solid #dee2e6;">
+          <h4 style="color: #0b62a4; margin-bottom: 0.5rem;">Project Aim</h4>
+          <p style="font-size: 0.88rem; color: #6c757d;">To develop a user-friendly web application that enables visitors to discover selected attractions in Kilinochchi and efficiently plan their visits using organized location-based information.</p>
+        </div>
+        <div style="background: #fff; padding: 1.25rem; border-radius: 6px; border: 1px solid #dee2e6;">
+          <h4 style="color: #2b7a78; margin-bottom: 0.5rem;">Architecture Stack</h4>
+          <p style="font-size: 0.88rem; color: #6c757d;">C# ASP.NET Core Web API backend, MySQL relational database with Entity Framework Core, and responsive vanilla HTML5, CSS3, and JavaScript frontend.</p>
+        </div>
+        <div style="background: #fff; padding: 1.25rem; border-radius: 6px; border: 1px solid #dee2e6;">
+          <h4 style="color: #28a745; margin-bottom: 0.5rem;">Stakeholders</h4>
+          <p style="font-size: 0.88rem; color: #6c757d;">Requirements validated through University LMS discussions with Suwedha Sivakumar (Tourist), Rukshana Roshan (Local Visitor), and Shashika Lakshan (Admin).</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL: PLACE DETAILS -->
+  <div id="placeModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header-media">
+        <img id="modalMedia" src="images/default_place.jpg" alt="Place Visual">
+        <button class="btn-close-modal" onclick="closePlaceModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h2 id="modalTitle" class="modal-title">Attraction Name</h2>
+        <div class="modal-meta-badges">
+          <span id="modalCategory" class="modal-badge">Category</span>
+          <span id="modalDistance" class="modal-badge highlight">Distance</span>
+        </div>
+        <p id="modalDesc" class="modal-desc">Comprehensive description of the destination.</p>
+
+        <div class="info-grid">
+          <div class="info-cell">
+            <h5>Opening Hours</h5>
+            <p id="modalHours">08:00 AM - 06:00 PM</p>
+          </div>
+          <div class="info-cell">
+            <h5>Entrance Fee</h5>
+            <p id="modalFee">Free</p>
+          </div>
+          <div class="info-cell">
+            <h5>Best Time to Visit</h5>
+            <p id="modalBestTime">Morning or Evening</p>
+          </div>
+          <div class="info-cell">
+            <h5>Available Facilities</h5>
+            <p id="modalFacilities">Parking, Restrooms</p>
+          </div>
+          <div class="info-cell" style="grid-column: 1/-1;">
+            <h5>Safety & Visitor Tips</h5>
+            <p id="modalSafety" style="font-weight: 500; font-size: 0.88rem; color: #495057;">Stay on public pathways.</p>
+          </div>
+          <div class="info-cell" style="grid-column: 1/-1;">
+            <h5>Address & Coordinates</h5>
+            <p id="modalAddress" style="font-weight: 500; font-size: 0.88rem; color: #495057;">Kilinochchi</p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+          <button class="btn-details" onclick="closePlaceModal()">Close</button>
+          <button id="modalActionBtn" class="btn-add-trip">
+            Add to One-Day Trip
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADMIN LOGIN -->
+  <div id="adminLoginModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 400px;">
+      <div class="modal-body" style="position: relative;">
+        <button class="btn-close-modal" style="top: 12px; right: 12px;" onclick="closeAdminLogin()">&times;</button>
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+          <h3 style="font-size: 1.35rem; color: #212529;">Administrator Login</h3>
+          <p style="font-size: 0.85rem; color: #6c757d;">Sign in to manage attraction records and categories</p>
+        </div>
+
+        <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+          <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600; color: #495057;">Username</label>
+            <input type="text" id="adminUsername" class="form-control" style="width: 100%; margin-top: 0.3rem;" value="angel" required>
+          </div>
+          <div style="margin-bottom: 1.5rem;">
+            <label style="font-size: 0.85rem; font-weight: 600; color: #495057;">Password</label>
+            <input type="password" id="adminPassword" class="form-control" style="width: 100%; margin-top: 0.3rem;" value="admin" required>
+          </div>
+          <button type="submit" class="btn-generate-trip" style="width: 100%;">
+            Login to Admin Panel
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADMIN DASHBOARD (CRUD) -->
+  <div id="adminDashboardModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 960px;">
+      <div class="modal-body" style="position: relative;">
+        <button class="btn-close-modal" style="top: 12px; right: 12px;" onclick="closeAdminDashboard()">&times;</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #dee2e6; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+          <div>
+            <h3 style="font-size: 1.4rem; color: #212529;">Attraction Management</h3>
+            <p style="font-size: 0.85rem; color: #6c757d;">Add, update, and remove tourist destinations in Kilinochchi</p>
+          </div>
+          <button class="btn-add-trip" style="flex: initial; padding: 0.5rem 1rem;" onclick="openAddPlaceModal()">
+            Add New Attraction
+          </button>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Attraction Name</th>
+                <th>Category</th>
+                <th>Distance</th>
+                <th>Opening Hours</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminPlacesTbody">
+              <!-- Rendered via app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT ATTRACTION FORM -->
+  <div id="placeFormModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 650px;">
+      <div class="modal-body" style="position: relative;">
+        <button class="btn-close-modal" style="top: 12px; right: 12px;" onclick="closePlaceFormModal()">&times;</button>
+        <h3 id="placeFormTitle" style="margin-bottom: 1.25rem; color: #212529;">Add New Tourist Attraction</h3>
+
+        <form id="placeForm" onsubmit="handlePlaceFormSubmit(event)">
+          <input type="hidden" id="editPlaceId">
+
+          <div class="form-row" style="margin-bottom: 1rem;">
+            <div style="flex: 1;">
+              <label style="font-size: 0.85rem; font-weight: 600;">Attraction Name *</label>
+              <input type="text" id="formPlaceName" class="form-control" style="width: 100%; margin-top: 0.25rem;" required>
+            </div>
+            <div style="flex: 1;">
+              <label style="font-size: 0.85rem; font-weight: 600;">Category *</label>
+              <select id="formPlaceCategory" class="form-control" style="width: 100%; margin-top: 0.25rem;" required>
+                <option value="1">Historical & Heritage</option>
+                <option value="2">Religious & Cultural</option>
+                <option value="3">Nature & Scenic</option>
+                <option value="4">Recreational & Parks</option>
+                <option value="5">Food & Dining</option>
+                <option value="6">Local Markets & Lifestyle</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-bottom: 1rem;">
+            <div style="flex: 1;">
+              <label style="font-size: 0.85rem; font-weight: 600;">Distance from Origin (km) *</label>
+              <input type="number" step="0.1" max="25.0" id="formPlaceDistance" class="form-control" style="width: 100%; margin-top: 0.25rem;" required>
+            </div>
+            <div style="flex: 1;">
+              <label style="font-size: 0.85rem; font-weight: 600;">Entrance Fee</label>
+              <input type="text" id="formPlaceFee" class="form-control" style="width: 100%; margin-top: 0.25rem;" value="Free">
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-bottom: 1rem;">
+            <div style="flex: 1;">
+              <label style="font-size: 0.85rem; font-weight: 600;">Opening Hours</label>
+              <input type="text" id="formPlaceHours" class="form-control" style="width: 100%; margin-top: 0.25rem;" value="08:00 AM - 06:00 PM">
+            </div>
+            <div style="flex: 1;">
+              <label style="font-size: 0.85rem; font-weight: 600;">Best Time to Visit</label>
+              <input type="text" id="formPlaceBestTime" class="form-control" style="width: 100%; margin-top: 0.25rem;" value="Morning or Late Afternoon">
+            </div>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Address / Location</label>
+            <input type="text" id="formPlaceAddress" class="form-control" style="width: 100%; margin-top: 0.25rem;" required>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Short Summary (Catalog Card) *</label>
+            <input type="text" id="formPlaceShortDesc" class="form-control" style="width: 100%; margin-top: 0.25rem;" required>
+          </div>
+
+          <div style="margin-bottom: 1rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Detailed Description *</label>
+            <textarea id="formPlaceLongDesc" class="form-control" style="width: 100%; height: 80px; margin-top: 0.25rem;" required></textarea>
+          </div>
+
+          <div style="margin-bottom: 1.5rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Available Facilities</label>
+            <input type="text" id="formPlaceFacilities" class="form-control" style="width: 100%; margin-top: 0.25rem;" value="Parking, Restrooms, Drinking Water">
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+            <button type="button" class="btn-details" onclick="closePlaceFormModal()">Cancel</button>
+            <button type="submit" class="btn-add-trip">Save Attraction</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-brand">
+        <h4>Explore Kilinochchi</h4>
+        <p>A web-based tourist information and trip planning platform developed for the Kilinochchi District, Northern Province, Sri Lanka.</p>
+        <div class="academic-meta">
+          <strong>Academic Submission:</strong><br>
+          Student ID: <strong>E2410134</strong><br>
+          Bachelor of Information Technology (BIT) | University of Moratuwa<br>
+          Module: <strong>ITE2953 - Programming Group Project 25S2</strong>
+        </div>
+      </div>
+
+      <div>
+        <h4 style="color: #ffffff; margin-bottom: 1rem;">Quick Navigation</h4>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.88rem;">
+          <li><a href="#explore">Browse Attractions</a></li>
+          <li><a href="#tripPlanner">1-Day Trip Planner</a></li>
+          <li><a href="#about">Project Scope & Aim</a></li>
+          <li><a href="javascript:void(0)" onclick="openAdminLogin()">Administrator Login</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 style="color: #ffffff; margin-bottom: 1rem;">Technical Specifications</h4>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; color: #cbd5e1;">
+          <li>Backend: C# ASP.NET Core 9</li>
+          <li>Database: MySQL 8.0 / EF Core</li>
+          <li>Frontend: HTML5, CSS3, ES6 JS</li>
+          <li>Radius: &lt; 25 km Verified Zone</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      &copy; 2026 Explore Kilinochchi. Built for University of Moratuwa BIT Module ITE2953. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+</body>
+</html>
